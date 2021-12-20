@@ -1,0 +1,6 @@
+# Python package dependencies
+
+flask~=2.0
+atomicwrites~=1.4
+uwsgi~=2.0
+safety
