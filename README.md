@@ -2,7 +2,10 @@
 
 This is a web server to receive data transmissions from OTT netDL data loggers.
 
-[Further documentation is located on Google Drive](https://drive.google.com/drive/folders/1IRdglNE6KCT73QKDvFtLjPB4bubs6hZQ?usp=sharing).
+Further documentation:
+
+* [Google Drive](https://drive.google.com/drive/folders/1IRdglNE6KCT73QKDvFtLjPB4bubs6hZQ?usp=sharing)
+* [ITS Wiki](https://itswiki.shef.ac.uk/wiki/Ufdlsrv01)
 
 This is a Flask application that receives HTTP POST requests containing XML data in the body (defined by `OTT_Data.xsd`). The HTTP request must have the correct query parameters, as expected to be sent by the data logger. The received data is saved to disk with no pre-processing. A response is sent as defined by `OTT_Response.xsd`.
 
@@ -111,7 +114,7 @@ sudo htpasswd /etc/nginx/.htpasswd dl002
 To validate a user's password:
 
 ```bash
-sudo htpasswd -v /etc/nginx/.htpasswd dl001
+htpasswd -v /etc/nginx/.htpasswd dl001
 ```
 
 # Maintenance
@@ -160,8 +163,13 @@ uwsgi --socket 0.0.0.0:5000 --protocol=http -w wsgi:app
 
 ## Web server
 
+To control the service:
+
 ```bash
-systemctl restart nginx
+# To reload configuration settings
+sudo systemctl reload nginx
+# To stop and restart the entire service
+sudo systemctl restart nginx
 ```
 
 View logs:
@@ -177,7 +185,7 @@ tail --follow /var/log/nginx/access.log
 You can test that the web server is responding like so:
 
 ```bash
-curl -u <username>:<password> https://ufdlsrv01.shef.ac.uk/server-status
+curl --head -u <username>:<password> https://ufdlsrv01.shef.ac.uk/server-status
 ```
 
 This will test the Flask app is responding:
@@ -193,7 +201,13 @@ The following is a command to make a HTTP POST request which sends a file to the
 curl -X POST -u username:password -d @transmission_test/senddata.xml "https://ufdlsrv01/ott/?stationid=1234&action=senddata"
 ```
 
-# Appendix: Generating a self-signed certificate
+# Appendix: Security certificate
+
+The security certificate is used to encrypt the web traffic on the web server.
+
+We use the x509 certificate including the certificate chain that is PEM encoded.
+
+## Generating a self-signed certificate
 
 Digital Ocean [OpenSSL Essentials: Working with SSL Certificates, Private Keys and CSRs](https://www.digitalocean.com/community/tutorials/openssl-essentials-working-with-ssl-certificates-private-keys-and-csrs#generating-ssl-certificates).
 
@@ -212,3 +226,35 @@ openssl x509 \
        -in ufdlsrv01.shef.ac.uk.csr \
        -req -out ufdlsrv01.shef.ac.uk.crt -days 365
 ```
+
+## Inspecting certificates
+
+To view the SHA1 fingerprint of the certificate:
+
+```bash
+openssl x509 -noout -fingerprint -sha1 -inform pem -in /home/uflo/.ssh/ufdlsrv01.shef.ac.uk.crt
+```
+
+To check the modulus of each file (to check that the private key corresponds to the public key) are the same:
+
+```bash
+openssl x509 -noout -modulus -in /home/uflo/.ssh/ufdlsrv01.shef.ac.uk.key
+openssl x509 -noout -modulus -in /home/uflo/.ssh/ufdlsrv01.shef.ac.uk.crt
+```
+
+Check certificate expiration dates:
+
+```bash
+openssl x509 -noout -dates -in /home/uflo/.ssh/ufdlsrv01.shef.ac.uk.crt
+```
+
+# Renewing certificates
+
+Contact InfoSec (give them the CSR file) to get a new certificate.
+
+NGINX must be reloaded (it doesn't need to be restarted) to use the new certificate.
+
+```bash
+sudo systemctl reload nginx
+```
+
