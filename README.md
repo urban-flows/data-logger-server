@@ -29,6 +29,7 @@ curl --head  https://ufdlsrv01.shef.ac.uk
 
 The server is configured to listen for the transmissions sent by the OTT data loggers, with the appropriate type of encryption and authentication mechanisms.
 
+
 ## Retrieve data
 
 Data are stored in the directories specified in `data_logger_server/settings.py`. The default target directory is `/home/uflo/dlsrv/senddata`. This directory may be configured as a symbolic link to a network mounted volume so that the research data is stored in a separate location and not on the virtual machine running the web server.
