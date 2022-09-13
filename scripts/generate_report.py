@@ -22,7 +22,6 @@ if __name__ == "__main__":
 
     args = get_args()
     date = date.today()
-    date = datetime.strptime('18/05/22', '%d/%m/%y')
 
     current_day = date.strftime("%d")
     current_month = date.strftime("%m")
