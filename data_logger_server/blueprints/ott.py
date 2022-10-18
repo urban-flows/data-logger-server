@@ -172,7 +172,7 @@ def ott_senddata():
             (see Sec. 4.2 and 9.3)
     """
 
-    return ott_response(root_dir=settings.DATA_DIR)
+    return ott_response(root_dir=settings.OTT_DATA_DIR)
 
 
 def ott_sendalarm():
@@ -187,7 +187,7 @@ def ott_sendalarm():
     # Raise the alarm
     app.logger.error(decode_request_data())
 
-    return ott_response(root_dir=settings.ALARM_DIR)
+    return ott_response(root_dir=settings.OTT_ALARM_DIR)
 
 
 @blueprint.route('/ping')

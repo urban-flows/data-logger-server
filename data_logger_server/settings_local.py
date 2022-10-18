@@ -2,5 +2,8 @@
 Machine-specific configuration files
 """
 
-DATA_DIR = 'senddata'
-ALARM_DIR = 'sendalarm'
+OTT_DATA_DIR = 'senddata'
+OTT_ALARM_DIR = 'sendalarm'
+
+CAMPBELL_DATA_DIR = 'campbell_data'
+CAMPBELL_ALARM_DIR = 'campbell_alarm'
