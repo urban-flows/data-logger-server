@@ -7,5 +7,8 @@ import pathlib
 ROOT_DIR = pathlib.Path('/home/uflo/data/rawData/dlsrv')
 
 # Subdirectories
-DATA_DIR = ROOT_DIR.joinpath('senddata')
-ALARM_DIR = ROOT_DIR.joinpath('sendalarm')
+OTT_DATA_DIR = 'senddata'
+OTT_ALARM_DIR = 'sendalarm'
+
+CAMPBELL_DATA_DIR = 'campbell_data'
+CAMPBELL_ALARM_DIR = 'campbell_alarm'
