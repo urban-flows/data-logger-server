@@ -9,6 +9,7 @@ def create_app() -> flask.Flask:
     # Register blueprints
     import blueprints.ott
     app.register_blueprint(blueprints.ott.blueprint)
+    app.register_blueprint(blueprints.campbell.blueprint)
 
     # Load response template
     with open(settings.RESPONSE_TEMPLATE_PATH) as file:
