@@ -30,7 +30,7 @@ import flask
 import settings
 
 app = flask.current_app
-blueprint = flask.Blueprint('ott', __name__)
+blueprint = flask.Blueprint('campbell', __name__)
 
 
 def get_dir(root_dir: pathlib.Path, time: datetime.datetime) -> pathlib.Path:
@@ -111,7 +111,7 @@ def decode_request_data() -> str:
     return flask.request.get_data(as_text=True)
 
 
-def ott_response(root_dir: pathlib.Path):
+def campbell_response(root_dir: pathlib.Path):
     """
     Generic OTT netDL response
 
@@ -138,8 +138,8 @@ def ott_response(root_dir: pathlib.Path):
     return flask.Response(body, mimetype='application/xml')
 
 
-@blueprint.route('/ott/', methods=['POST'])
-def ott():
+@blueprint.route('/campbell/', methods=['POST'])
+def campbell():
     """
     Route request to the appropriate function
     """
@@ -147,8 +147,8 @@ def ott():
     # Map action to handler
     # Each handler has a different function and serialisation directory
     handlers = dict(
-        senddata=ott_senddata,
-        sendalarm=ott_sendalarm,
+        senddata=campbell_senddata,
+        sendalarm=campbell_sendalarm,
     )
 
     handler = handlers[flask.request.args['action']]
@@ -156,7 +156,7 @@ def ott():
     return handler()
 
 
-def ott_senddata():
+def campbell_senddata():
     """
     OTT data app.logger server (action=senddata or OTT_Data.xsd)
 
@@ -172,10 +172,10 @@ def ott_senddata():
             (see Sec. 4.2 and 9.3)
     """
 
-    return ott_response(root_dir=settings.DATA_DIR)
+    return campbell_response(root_dir=settings.CAMPBELL_DATA_DIR)
 
 
-def ott_sendalarm():
+def campbell_sendalarm():
     """
     Receive OTT netDL alarm signals (action=sendalarm or OTT_Alarm.xsd)
 
@@ -187,12 +187,4 @@ def ott_sendalarm():
     # Raise the alarm
     app.logger.error(decode_request_data())
 
-    return ott_response(root_dir=settings.ALARM_DIR)
-
-
-@blueprint.route('/ping')
-def ping():
-    """
-    Test endpoint
-    """
-    return 'pong\n'
+    return campbell_response(root_dir=settings.CAMPBELL_ALARM_DIR)
