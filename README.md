@@ -199,7 +199,7 @@ The following is a command to make a HTTP POST request which sends a file to the
 
 ```bash
 # Send specified file via HTTP POST method
-curl -X POST -u username:password -d @transmission_test/senddata.xml "https://ufdlsrv01/ott/?stationid=1234&action=senddata"
+curl -X POST -u username:password -d @transmission_test/senddata.xml "https://ufdlsrv01.shef.ac.uk/ott/?stationid=1234&action=senddata"
 ```
 
 # Appendix: Security certificate
