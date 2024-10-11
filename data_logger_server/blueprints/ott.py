@@ -138,7 +138,7 @@ def ott_response(root_dir: pathlib.Path):
     return flask.Response(body, mimetype='application/xml')
 
 
-@blueprint.route('/ott/', methods=['POST'])
+@blueprint.route('/ott', strict_slashes=False, methods=['POST'])
 def ott():
     """
     Route request to the appropriate function
